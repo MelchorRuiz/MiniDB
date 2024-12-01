@@ -46,18 +46,22 @@ gcc -o MiniDB main.c model.c view.c controller.c
 ## Uso
 
 ### Desde la línea de comandos
-Cuando inicies MiniDB, aparecerá un menú interactivo para gestionar los registros:
+Cuando inicies MiniDB, aparecerá un menú donde puedes ingresar peticiones SQL.
 ```plaintext
-Menú de opciones:
-1. Insertar registro
-2. Mostrar todos los registros
-3. Modificar registro
-4. Eliminar registro
-5. Salir
-Seleccione una opción:
+Bienvenido al gestor de base de datos.
+--------------------------------------
+Escriba 'exit' para salir.
+--------------------------------------
+Ejemplo de comandos:
+CREATE DATABASE database_name
+CREATE TABLE database_name.table_name (column1_name,column2_name,...)
+INSERT INTO database_name.table_name VALUES (value1,value2,...)
+SELECT * FROM database_name.table_name
+--------------------------------------
+db> 
 ```
 
-### Desde Python u otro cliente
+### Desde Python u otro cliente (Próximamente)
 MiniDB incluye un servidor que escucha solicitudes API en el puerto **8080**. Puedes enviar comandos como `INSERT`, `DISPLAY`, etc., desde cualquier cliente que utilice sockets.
 
 Ejemplo de cliente en Python:
