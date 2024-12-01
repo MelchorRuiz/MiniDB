@@ -1,6 +1,5 @@
 #include <stdio.h>
-#include <string.h>
-#include "model.h"
+#include "controller.h"
 #include "view.h"
 #include <sys/stat.h>
 
@@ -16,43 +15,11 @@ void ensureDbDirectoryExists()
 int main()
 {
   ensureDbDirectoryExists();
-
-  Database d;
-  d.id = 1;
-  strcpy(d.name, "My Database");
-  insertDatabase(d);
-
-  Table t;
-  t.id = 1;
-  strcpy(t.name, "My Table");
-  t.records = 0;
-  t.columns = 0;
-  t.databaseId = d.id;
-  insertTable(t);
-
-  Column c;
-  c.id = 1;
-  strcpy(c.name, "My Column");
-  strcpy(c.type, "TEXT");
-  c.tableId = t.id;
-  insertColumn(c);
-
-  Record r;
-  r.id = 1;
-  strcpy(r.value, "My Record");
-  r.columnId = c.id;
-  insertRecord(r);
-
-  c.id = 2;
-  strcpy(c.name, "My Column 2");
-  insertColumn(c);
-
-  r.id = 2;
-  strcpy(r.value, "My Record 2");
-  r.columnId = c.id;
-  insertRecord(r);
-
-
-  displayTable(t.id);
+  handleRequest("CREATE DATABASE test");
+  handleRequest("CREATE TABLE test.users (name,age)");
+  handleRequest("INSERT INTO test.users VALUES (John Doe,30)");
+  handleRequest("INSERT INTO test.users VALUES (Jane Doe,25)");
+  handleRequest("SELECT * FROM test.users");
+  
   return 0;
 }
