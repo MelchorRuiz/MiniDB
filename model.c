@@ -107,13 +107,13 @@ Table* getTables(int *size, int databaseId)
   return tables;
 }
 
-Table getTable(char *name)
+Table getTable(char *name, int databaseId)
 {
   FILE *file = fopen("db/tables.dat", "rb");
   Table t;
   while (fread(&t, sizeof(Table), 1, file))
   {
-    if (strcmp(t.name, name) == 0)
+    if (strcmp(t.name, name) == 0 && t.databaseId == databaseId)
     {
       fclose(file);
       return t;
@@ -121,7 +121,8 @@ Table getTable(char *name)
   }
   fclose(file);
   printf("Table not found");
-  return t;
+  Table emptyTable = {0};
+  return emptyTable;
 }
 
 void modifyTable(Table t)
@@ -187,13 +188,13 @@ Column* getColumns(int *size, int tableId)
   return columns;
 }
 
-Column getColumn(char *name)
+Column getColumn(char *name, int tableId)
 {
   FILE *file = fopen("db/columns.dat", "rb");
   Column c;
   while (fread(&c, sizeof(Column), 1, file))
   {
-    if (strcmp(c.name, name) == 0)
+    if (strcmp(c.name, name) == 0 && c.tableId == tableId)
     {
       fclose(file);
       return c;
@@ -201,7 +202,8 @@ Column getColumn(char *name)
   }
   fclose(file);
   printf("Column not found");
-  return c;
+  Column emptyColumn = {0};
+  return emptyColumn;
 }
 
 void modifyColumn(Column c)
