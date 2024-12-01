@@ -21,16 +21,29 @@ int main()
   d.id = 1;
   strcpy(d.name, "My Database");
   insertDatabase(d);
+
   d.id = 2;
+  strcpy(d.name, "My Database 2");
   insertDatabase(d);
+
   displayDatabases();
 
-  strcpy(d.name, "My New Database");
-  modifyDatabase(d);
-  displayDatabases();
-  
-  d = getDatabase("My Database");
-  deleteDatabase(d);
-  displayDatabases();
+  Table t;
+  t.id = 1;
+  strcpy(t.name, "My Table");
+  t.records = 0;
+  t.columns = 0;
+  t.databaseId = d.id;
+  insertTable(t);
+  displayTables(d.id);
+
+  strcpy(t.name, "My Table 2");
+  modifyTable(t);
+  displayTables(d.id);
+
+  deleteTable(t);
+  displayTables(d.id);
+
+
   return 0;
 }

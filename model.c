@@ -31,9 +31,6 @@ Database getDatabase(char *name)
 {
   FILE *file = fopen("db/databases.dat", "rb");
   Database d;
-  printf("+-----------------------------+\n");
-  printf("| Id   | Database Name        |\n");
-  printf("+-----------------------------+\n");
   while (fread(&d, sizeof(Database), 1, file))
   {
     if (strcmp(d.name, name) == 0)
@@ -77,7 +74,6 @@ void deleteDatabase(Database d)
       fwrite(&tmp, sizeof(Database), 1, tmpFile);
     }
   }
-  printf("+-----------------------------+\n");
   fclose(file);
   fclose(tmpFile);
   remove("db/databases.dat");
@@ -91,22 +87,77 @@ void insertTable(Table t)
   fclose(file);
 }
 
-void displayTables(Database d)
+Table* getTables(int *size, int databaseId)
+{
+  FILE *file = fopen("db/tables.dat", "rb");
+  Table *tables = (Table*)malloc(sizeof(Table));
+  Table t;
+  int i = 0;
+  while (fread(&t, sizeof(Table), 1, file))
+  {
+    if (t.databaseId == databaseId)
+    {
+      tables = (Table*)realloc(tables, (i+1)*sizeof(Table));
+      tables[i] = t;
+      i++;
+    }
+  }
+  fclose(file);
+  *size = i;
+  return tables;
+}
+
+Table getTable(char *name)
 {
   FILE *file = fopen("db/tables.dat", "rb");
   Table t;
-  printf("+------+----------------------+---------+\n");
-  printf("| Id   | Table Name           | Records |\n");
-  printf("+------+----------------------+---------+\n");
   while (fread(&t, sizeof(Table), 1, file))
   {
-    if (t.databaseId == d.id)
+    if (strcmp(t.name, name) == 0)
     {
-      printf("| %-4d | %-20s | %-7d |\n", t.id, t.name, t.records);
+      fclose(file);
+      return t;
     }
   }
-  printf("+------+----------------------+---------+\n");
   fclose(file);
+  printf("Table not found");
+  return t;
+}
+
+void modifyTable(Table t)
+{
+  FILE *file = fopen("db/tables.dat", "rb+");
+  Table tmp;
+  while(fread(&tmp, sizeof(Table), 1, file))
+  {
+    if (t.id == tmp.id)
+    {
+      fseek(file, -sizeof(Table), SEEK_CUR);
+      fwrite(&t, sizeof(Table), 1, file);
+      fclose(file);
+      return;
+    }
+  }
+  fclose(file);
+  printf("Table not found");
+}
+
+void deleteTable(Table t)
+{
+  FILE *file = fopen("db/tables.dat", "rb");
+  FILE *tmpFile = fopen("db/tmp.dat", "wb");
+  Table tmp;
+  while(fread(&tmp, sizeof(Table), 1, file))
+  {
+    if (t.id != tmp.id)
+    {
+      fwrite(&tmp, sizeof(Table), 1, tmpFile);
+    }
+  }
+  fclose(file);
+  fclose(tmpFile);
+  remove("db/tables.dat");
+  rename("db/tmp.dat", "db/tables.dat");
 }
 
 void insertColumn(Column c)

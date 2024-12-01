@@ -37,9 +37,11 @@ Database getDatabase(char *name);
 void modifyDatabase(Database d);
 void deleteDatabase(Database d);
 
-// void insertTable(Table t);
-// void modifyTable(Table t);
-// void displayTables(Database d);
+void insertTable(Table t);
+Table* getTables(int *size, int databaseId);
+Table getTable(char *name);
+void modifyTable(Table t);
+void deleteTable(Table t);
 
 // void insertColumn(Column c);
 // void insertRecord(Record r);
