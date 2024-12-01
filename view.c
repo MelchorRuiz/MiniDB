@@ -29,3 +29,17 @@ void displayTables(int databaseId)
   }
   printf("+------+----------------------+---------+\n");
 }
+
+void displayColumns(int tableId)
+{
+  printf("+------+----------------------+---------+\n");
+  printf("| Id   | Column Name          | Type    |\n");
+  printf("+------+----------------------+---------+\n");
+  int size;
+  Column *columns = getColumns(&size, tableId);
+  for (int i = 0; i < size; i++)
+  {
+    printf("| %-4d | %-20s | %-7s |\n", columns[i].id, columns[i].name, columns[i].type);
+  }
+  printf("+------+----------------------+---------+\n");
+}

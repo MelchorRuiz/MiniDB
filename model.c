@@ -167,11 +167,77 @@ void insertColumn(Column c)
   fclose(file);
 }
 
-void insertRecord(Record r)
+Column* getColumns(int *size, int tableId)
 {
-  FILE *file = fopen("db/records.dat", "ab");
-  fwrite(&r, sizeof(Record), 1, file);
+  FILE *file = fopen("db/columns.dat", "rb");
+  Column *columns = (Column*)malloc(sizeof(Column));
+  Column c;
+  int i = 0;
+  while (fread(&c, sizeof(Column), 1, file))
+  {
+    if (c.tableId == tableId)
+    {
+      columns = (Column*)realloc(columns, (i+1)*sizeof(Column));
+      columns[i] = c;
+      i++;
+    }
+  }
   fclose(file);
+  *size = i;
+  return columns;
+}
+
+Column getColumn(char *name)
+{
+  FILE *file = fopen("db/columns.dat", "rb");
+  Column c;
+  while (fread(&c, sizeof(Column), 1, file))
+  {
+    if (strcmp(c.name, name) == 0)
+    {
+      fclose(file);
+      return c;
+    }
+  }
+  fclose(file);
+  printf("Column not found");
+  return c;
+}
+
+void modifyColumn(Column c)
+{
+  FILE *file = fopen("db/columns.dat", "rb+");
+  Column tmp;
+  while(fread(&tmp, sizeof(Column), 1, file))
+  {
+    if (c.id == tmp.id)
+    {
+      fseek(file, -sizeof(Column), SEEK_CUR);
+      fwrite(&c, sizeof(Column), 1, file);
+      fclose(file);
+      return;
+    }
+  }
+  fclose(file);
+  printf("Column not found");
+}
+
+void deleteColumn(Column c)
+{
+  FILE *file = fopen("db/columns.dat", "rb");
+  FILE *tmpFile = fopen("db/tmp.dat", "wb");
+  Column tmp;
+  while(fread(&tmp, sizeof(Column), 1, file))
+  {
+    if (c.id != tmp.id)
+    {
+      fwrite(&tmp, sizeof(Column), 1, tmpFile);
+    }
+  }
+  fclose(file);
+  fclose(tmpFile);
+  remove("db/columns.dat");
+  rename("db/tmp.dat", "db/columns.dat");
 }
 
 void displayTable(Table t)

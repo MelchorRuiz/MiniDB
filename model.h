@@ -43,9 +43,13 @@ Table getTable(char *name);
 void modifyTable(Table t);
 void deleteTable(Table t);
 
-// void insertColumn(Column c);
+void insertColumn(Column c);
+Column* getColumns(int *size, int tableId);
+Column getColumn(char *name);
+void modifyColumn(Column c);
+void deleteColumn(Column c);
+
 // void insertRecord(Record r);
 
-// void displayTable(Table t);
 
 #endif

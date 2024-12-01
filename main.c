@@ -22,10 +22,6 @@ int main()
   strcpy(d.name, "My Database");
   insertDatabase(d);
 
-  d.id = 2;
-  strcpy(d.name, "My Database 2");
-  insertDatabase(d);
-
   displayDatabases();
 
   Table t;
@@ -37,13 +33,25 @@ int main()
   insertTable(t);
   displayTables(d.id);
 
-  strcpy(t.name, "My Table 2");
-  modifyTable(t);
-  displayTables(d.id);
+  Column c;
+  c.id = 1;
+  strcpy(c.name, "My Column");
+  strcpy(c.type, "TEXT");
+  c.tableId = t.id;
+  insertColumn(c);
 
-  deleteTable(t);
-  displayTables(d.id);
+  c.id = 2;
+  strcpy(c.name, "My Column 2");
+  insertColumn(c);
 
+  displayColumns(t.id);
+
+  strcpy(c.name, "My Other Column");
+  modifyColumn(c);
+  displayColumns(t.id);
+
+  deleteColumn(c);
+  displayColumns(t.id);
 
   return 0;
 }
