@@ -42,7 +42,6 @@ int main()
   strcpy(r.value, "My Record");
   r.columnId = c.id;
   insertRecord(r);
-  displayRecords(c.id);
 
   c.id = 2;
   strcpy(c.name, "My Column 2");
@@ -52,14 +51,8 @@ int main()
   strcpy(r.value, "My Record 2");
   r.columnId = c.id;
   insertRecord(r);
-  displayRecords(c.id);
 
-  strcpy(r.value, "My Record 3");
-  modifyRecord(r);
-  displayRecords(c.id);
 
-  deleteRecord(r);
-  displayRecords(c.id);
-
+  displayTable(t.id);
   return 0;
 }

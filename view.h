@@ -6,4 +6,6 @@ void displayTables(int databaseId);
 void displayColumns(int tableId);
 void displayRecords(int columnId);
 
+void displayTable(int tableId);
+
 #endif

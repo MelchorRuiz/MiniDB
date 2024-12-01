@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "view.h"
 #include "model.h"
 
@@ -56,4 +57,52 @@ void displayRecords(int columnId)
     printf("| %-4d | %-20s |\n", records[i].id, records[i].value);
   }
   printf("+------+----------------------+\n");
+}
+
+void displayTable(int tableId)
+{
+  Table t;
+  t.id = tableId;
+  Column *columns = getColumns(&t.columns, t.id);
+  
+  Record **records = (Record**)malloc(t.columns*sizeof(Record*));
+  for (int i = 0; i < t.columns; i++)
+  {
+    records[i] = getRecords(&t.records, columns[i].id);
+  }
+
+  printf("+");
+  for (int i = 0; i < t.columns; i++)
+  {
+    printf("---------------+");
+  }
+  printf("\n|");
+  for (int i = 0; i < t.columns; i++)
+  {
+    printf(" %-13s |", columns[i].name);
+  }
+  printf("\n+");
+  for (int i = 0; i < t.columns; i++)
+  {
+    printf("---------------+");
+  }
+  printf("\n");
+
+  for (int i = 0; i < t.records; i++)
+  {
+    printf("|");
+    for (int j = 0; j < t.columns; j++)
+    {
+      printf(" %-13s |", records[j][i].value);
+    }
+    printf("\n");
+  }
+
+  printf("+");
+  for (int i = 0; i < t.columns; i++)
+  {
+    printf("---------------+");
+  }
+  printf("\n");
+
 }
