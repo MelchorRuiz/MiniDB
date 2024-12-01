@@ -5,12 +5,41 @@ typedef struct
 {
   int id;
   char name[100];
-  int age;
-} Person;
+} Database;
 
-void insertRecord(const char *filename, Person p);
-void displayRecords(const char *filename);
-void modifyRecord(const char *filename, int id, Person newRecord);
-void deleteRecord(const char *filename, int id);
+typedef struct
+{
+  int id;
+  char name[100];
+  int records;
+  int columns;
+  int databaseId;
+} Table;
+
+typedef struct
+{
+  int id;
+  char name[100];
+  char type[100];
+  int tableId;
+} Column;
+
+typedef struct
+{
+  int id;
+  char value[100];
+  int columnId;
+} Record;
+
+void insertDatabase(Database d);
+void displayDatabases();
+
+void insertTable(Table t);
+void displayTables(Database d);
+
+void insertColumn(Column c);
+void insertRecord(Record r);
+
+void displayTable(Table t);
 
 #endif

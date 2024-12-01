@@ -3,84 +3,123 @@
 #include <string.h>
 #include "model.h"
 
-// Implementación de las funciones de acceso a datos
-
-void insertRecord(const char *filename, Person p)
+void insertDatabase(Database d)
 {
-  FILE *file = fopen(filename, "ab");
-  if (file == NULL)
-  {
-    printf("Error abriendo el archivo para insertar.\n");
-    return;
-  }
-  fwrite(&p, sizeof(Person), 1, file);
+  FILE *file = fopen("db/databases.dat", "ab");
+  fwrite(&d, sizeof(Database), 1, file);
   fclose(file);
 }
 
-void displayRecords(const char *filename)
+void displayDatabases()
 {
-  FILE *file = fopen(filename, "rb");
-  if (file == NULL)
+  FILE *file = fopen("db/databases.dat", "rb");
+  Database d;
+  printf("+-----------------------------+\n");
+  printf("| Id   | Database Name        |\n");
+  printf("+-----------------------------+\n");
+  while (fread(&d, sizeof(Database), 1, file))
   {
-    printf("Error abriendo el archivo para leer.\n");
-    return;
+    printf("| %-4d | %-20s |\n", d.id, d.name);
   }
-  Person p;
-  while (fread(&p, sizeof(Person), 1, file))
-  {
-    printf("ID: %d, Nombre: %s, Edad: %d\n", p.id, p.name, p.age);
-  }
+  printf("+-----------------------------+\n");
   fclose(file);
 }
 
-void modifyRecord(const char *filename, int id, Person newRecord)
+void insertTable(Table t)
 {
-  FILE *file = fopen(filename, "rb+");
-  if (file == NULL)
+  FILE *file = fopen("db/tables.dat", "ab");
+  fwrite(&t, sizeof(Table), 1, file);
+  fclose(file);
+}
+
+void displayTables(Database d)
+{
+  FILE *file = fopen("db/tables.dat", "rb");
+  Table t;
+  printf("+------+----------------------+---------+\n");
+  printf("| Id   | Table Name           | Records |\n");
+  printf("+------+----------------------+---------+\n");
+  while (fread(&t, sizeof(Table), 1, file))
   {
-    printf("Error abriendo el archivo para modificar.\n");
-    return;
-  }
-  Person p;
-  while (fread(&p, sizeof(Person), 1, file))
-  {
-    if (p.id == id)
+    if (t.databaseId == d.id)
     {
-      fseek(file, -sizeof(Person), SEEK_CUR);
-      fwrite(&newRecord, sizeof(Person), 1, file);
-      fclose(file);
-      return;
+      printf("| %-4d | %-20s | %-7d |\n", t.id, t.name, t.records);
     }
   }
+  printf("+------+----------------------+---------+\n");
   fclose(file);
-  printf("Registro no encontrado.\n");
 }
 
-void deleteRecord(const char *filename, int id)
+void insertColumn(Column c)
 {
-  FILE *file = fopen(filename, "rb");
-  if (file == NULL)
+  FILE *file = fopen("db/columns.dat", "ab");
+  fwrite(&c, sizeof(Column), 1, file);
+  fclose(file);
+}
+
+void insertRecord(Record r)
+{
+  FILE *file = fopen("db/records.dat", "ab");
+  fwrite(&r, sizeof(Record), 1, file);
+  fclose(file);
+}
+
+void displayTable(Table t)
+{
+  FILE *columnsFile = fopen("db/columns.dat", "rb");
+  FILE *recordsFile = fopen("db/records.dat", "rb");
+
+  Column columns[t.columns];
+  Record records[t.records*t.columns];
+
+  int i = 0;
+  int j = 0;
+  Column c;
+  while(fread(&c, sizeof(Column), 1, columnsFile))
   {
-    printf("Error abriendo el archivo para eliminar.\n");
-    return;
-  }
-  FILE *tempFile = fopen("temp.dat", "wb");
-  if (tempFile == NULL)
-  {
-    printf("Error creando el archivo temporal.\n");
-    fclose(file);
-    return;
-  }
-  Person p;
-  while (fread(&p, sizeof(Person), 1, file))
-  {
-    if (p.id != id)
+    if (c.tableId == t.id)
     {
-      fwrite(&p, sizeof(Person), 1, tempFile);
+      columns[i] = c;
+      i++;
+      Record r;
+      while(fread(&r, sizeof(Record), 1, recordsFile))
+      {
+        if (r.columnId == c.id)
+        {
+          records[j] = r;
+          j++;
+        }
+      }
     }
   }
-  fclose(file);
-  fclose(tempFile);
-  remove(filename);
-  rename("temp.dat", filename);
+
+  printf("+");
+  for (int i = 0; i < t.columns; i++)
+  {
+    printf("---------------+");
+  }
+  printf("\n|");
+  for (int i = 0; i < t.columns; i++)
+  {
+    printf(" %-13s |", columns[i].name);
+  }
+  printf("\n+");
+  for (int i = 0; i < t.columns; i++)
+  {
+    printf("---------------+");
+  }
+  printf("\n");
+
+  for (int i = 0; i < t.records; i++)
+  {
+    printf("|");
+    for (int j = 0; j < t.columns; j++)
+    {
+      printf(" %-13s |", records[i*t.columns+j].value);
+    }
+    printf("\n");
+  }
+
+  fclose(columnsFile);
+  fclose(recordsFile);
 }
