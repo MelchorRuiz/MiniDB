@@ -10,7 +10,24 @@ void insertDatabase(Database d)
   fclose(file);
 }
 
-void displayDatabases()
+Database* getDatabases(int *size)
+{
+  FILE *file = fopen("db/databases.dat", "rb");
+  Database *databases = (Database*)malloc(sizeof(Database));
+  Database d;
+  int i = 0;
+  while (fread(&d, sizeof(Database), 1, file))
+  {
+    databases = (Database*)realloc(databases, (i+1)*sizeof(Database));
+    databases[i] = d;
+    i++;
+  }
+  fclose(file);
+  *size = i;
+  return databases;
+}
+
+Database getDatabase(char *name)
 {
   FILE *file = fopen("db/databases.dat", "rb");
   Database d;
@@ -19,10 +36,52 @@ void displayDatabases()
   printf("+-----------------------------+\n");
   while (fread(&d, sizeof(Database), 1, file))
   {
-    printf("| %-4d | %-20s |\n", d.id, d.name);
+    if (strcmp(d.name, name) == 0)
+    {
+      fclose(file);
+      return d;
+    }
+  }
+  fclose(file);
+  printf("Database not found");
+  return d;
+}
+
+void modifyDatabase(Database d)
+{
+  FILE *file = fopen("db/databases.dat", "rb+");
+  Database tmp;
+  while(fread(&tmp, sizeof(Database), 1, file))
+  {
+    if (d.id == tmp.id)
+    {
+      fseek(file, -sizeof(Database), SEEK_CUR);
+      fwrite(&d, sizeof(Database), 1, file);
+      fclose(file);
+      return;
+    }
+  }
+  fclose(file);
+  printf("Database not found");
+}
+
+void deleteDatabase(Database d)
+{
+  FILE *file = fopen("db/databases.dat", "rb");
+  FILE *tmpFile = fopen("db/tmp.dat", "wb");
+  Database tmp;
+  while(fread(&tmp, sizeof(Database), 1, file))
+  {
+    if (d.id != tmp.id)
+    {
+      fwrite(&tmp, sizeof(Database), 1, tmpFile);
+    }
   }
   printf("+-----------------------------+\n");
   fclose(file);
+  fclose(tmpFile);
+  remove("db/databases.dat");
+  rename("db/tmp.dat", "db/databases.dat");
 }
 
 void insertTable(Table t)

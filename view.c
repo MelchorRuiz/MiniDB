@@ -1,18 +1,17 @@
 #include <stdio.h>
 #include "view.h"
+#include "model.h"
 
-void showMenu()
+void displayDatabases()
 {
-  printf("\nMenú de opciones:\n");
-  printf("1. Insertar registro\n");
-  printf("2. Mostrar todos los registros\n");
-  printf("3. Modificar registro\n");
-  printf("4. Eliminar registro\n");
-  printf("5. Salir\n");
-  printf("Seleccione una opción: ");
-}
-
-void showMessage(const char *message)
-{
-  printf("%s\n", message);
+  printf("+-----------------------------+\n");
+  printf("| Id   | Database Name        |\n");
+  printf("+-----------------------------+\n");
+  int size;
+  Database *databases = getDatabases(&size);
+  for (int i = 0; i < size; i++)
+  {
+    printf("| %-4d | %-20s |\n", databases[i].id, databases[i].name);
+  }
+  printf("+-----------------------------+\n");
 }

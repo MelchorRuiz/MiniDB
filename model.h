@@ -32,14 +32,18 @@ typedef struct
 } Record;
 
 void insertDatabase(Database d);
-void displayDatabases();
+Database* getDatabases(int *size);
+Database getDatabase(char *name);
+void modifyDatabase(Database d);
+void deleteDatabase(Database d);
 
-void insertTable(Table t);
-void displayTables(Database d);
+// void insertTable(Table t);
+// void modifyTable(Table t);
+// void displayTables(Database d);
 
-void insertColumn(Column c);
-void insertRecord(Record r);
+// void insertColumn(Column c);
+// void insertRecord(Record r);
 
-void displayTable(Table t);
+// void displayTable(Table t);
 
 #endif

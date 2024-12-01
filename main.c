@@ -1,37 +1,36 @@
 #include <stdio.h>
+#include <string.h>
 #include "model.h"
 #include "view.h"
-#include "controller.h"
+#include <sys/stat.h>
+
+void ensureDbDirectoryExists()
+{
+  struct stat st = {0};
+  if (stat("db", &st) == -1)
+  {
+    mkdir("db", 0700);
+  }
+}
 
 int main()
 {
-  const char *filename = "database.dat";
-  int option;
+  ensureDbDirectoryExists();
 
-  while (1)
-  {
-    showMenu();
-    scanf("%d", &option);
+  Database d;
+  d.id = 1;
+  strcpy(d.name, "My Database");
+  insertDatabase(d);
+  d.id = 2;
+  insertDatabase(d);
+  displayDatabases();
 
-    switch (option)
-    {
-    case 1:
-      handleInsert(filename);
-      break;
-    case 2:
-      handleDisplay(filename);
-      break;
-    case 3:
-      handleModify(filename);
-      break;
-    case 4:
-      handleDelete(filename);
-      break;
-    case 5:
-      showMessage("Saliendo del programa.");
-      return 0;
-    default:
-      showMessage("Opción no válida.");
-    }
-  }
+  strcpy(d.name, "My New Database");
+  modifyDatabase(d);
+  displayDatabases();
+  
+  d = getDatabase("My Database");
+  deleteDatabase(d);
+  displayDatabases();
+  return 0;
 }
