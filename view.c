@@ -43,3 +43,17 @@ void displayColumns(int tableId)
   }
   printf("+------+----------------------+---------+\n");
 }
+
+void displayRecords(int columnId)
+{
+  printf("+------+----------------------+\n");
+  printf("| Id   | Record Value         |\n");
+  printf("+------+----------------------+\n");
+  int size;
+  Record *records = getRecords(&size, columnId);
+  for (int i = 0; i < size; i++)
+  {
+    printf("| %-4d | %-20s |\n", records[i].id, records[i].value);
+  }
+  printf("+------+----------------------+\n");
+}

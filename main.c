@@ -22,8 +22,6 @@ int main()
   strcpy(d.name, "My Database");
   insertDatabase(d);
 
-  displayDatabases();
-
   Table t;
   t.id = 1;
   strcpy(t.name, "My Table");
@@ -31,7 +29,6 @@ int main()
   t.columns = 0;
   t.databaseId = d.id;
   insertTable(t);
-  displayTables(d.id);
 
   Column c;
   c.id = 1;
@@ -40,18 +37,29 @@ int main()
   c.tableId = t.id;
   insertColumn(c);
 
+  Record r;
+  r.id = 1;
+  strcpy(r.value, "My Record");
+  r.columnId = c.id;
+  insertRecord(r);
+  displayRecords(c.id);
+
   c.id = 2;
   strcpy(c.name, "My Column 2");
   insertColumn(c);
 
-  displayColumns(t.id);
+  r.id = 2;
+  strcpy(r.value, "My Record 2");
+  r.columnId = c.id;
+  insertRecord(r);
+  displayRecords(c.id);
 
-  strcpy(c.name, "My Other Column");
-  modifyColumn(c);
-  displayColumns(t.id);
+  strcpy(r.value, "My Record 3");
+  modifyRecord(r);
+  displayRecords(c.id);
 
-  deleteColumn(c);
-  displayColumns(t.id);
+  deleteRecord(r);
+  displayRecords(c.id);
 
   return 0;
 }

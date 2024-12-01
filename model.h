@@ -39,17 +39,21 @@ void deleteDatabase(Database d);
 
 void insertTable(Table t);
 Table* getTables(int *size, int databaseId);
+// TODO. Add getTable by name and databaseId
 Table getTable(char *name);
 void modifyTable(Table t);
 void deleteTable(Table t);
 
 void insertColumn(Column c);
 Column* getColumns(int *size, int tableId);
+// TODO. Add getColumn by name and tableId
 Column getColumn(char *name);
 void modifyColumn(Column c);
 void deleteColumn(Column c);
 
-// void insertRecord(Record r);
-
+void insertRecord(Record r);
+Record* getRecords(int *size, int columnId);
+void modifyRecord(Record r);
+void deleteRecord(Record r);
 
 #endif

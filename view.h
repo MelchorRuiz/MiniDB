@@ -4,5 +4,6 @@
 void displayDatabases();
 void displayTables(int databaseId);
 void displayColumns(int tableId);
+void displayRecords(int columnId);
 
 #endif
