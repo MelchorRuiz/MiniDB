@@ -138,10 +138,6 @@ void createRecord(char *tableName, char *databaseName, char *values)
   modifyTable(t);
 }
 
-// CREATE DATABASE database_name;
-// CREATE TABLE database_name.table_name (column1_name,column2_name,...);
-// INSERT INTO database_name.table_name VALUES (value1,value2,...);
-// SELECT * FROM database_name.table_name;
 void handleRequest(char* request)
 {
   char requestCopy[strlen(request) + 1];
